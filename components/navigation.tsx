@@ -8,17 +8,25 @@ import { useMutation } from "convex/react";
 import {
   ChevronsLeft,
   MenuIcon,
+  Plus,
   PlusCircle,
   Search,
   Settings,
+  Trash,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
+import { api } from "@/convex/_generated/api";
 import UserItem from "@/components/user-item";
 import Item from "@/components/item";
 import DocumentList from "@/components/document-list";
-import { api } from "@/convex/_generated/api";
+import TrashBox from "@/components/trash-box";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 
 interface NavigationProps {}
 
@@ -145,6 +153,18 @@ const Navigation: React.FC<NavigationProps> = ({}) => {
         </div>
         <div className="mt-4">
           <DocumentList />
+          <Item onClick={handleCreate} icon={Plus} label="Add a page" />
+          <Popover>
+            <PopoverTrigger className="w-full mt-4">
+              <Item label="Trash" icon={Trash} />
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-0 w-72"
+              side={isMobile ? "bottom" : "right"}
+            >
+              <TrashBox />
+            </PopoverContent>
+          </Popover>
         </div>
         <div
           onMouseDown={handleMouseDown}
