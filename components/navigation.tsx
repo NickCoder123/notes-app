@@ -4,7 +4,7 @@
 import React, { ElementRef, useRef, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import {
   ChevronsLeft,
   MenuIcon,
@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import UserItem from "@/components/user-item";
 import Item from "@/components/item";
+import DocumentList from "@/components/document-list";
 import { api } from "@/convex/_generated/api";
 
 interface NavigationProps {}
@@ -24,7 +25,6 @@ interface NavigationProps {}
 const Navigation: React.FC<NavigationProps> = ({}) => {
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const documents = useQuery(api.documents.get);
   const create = useMutation(api.documents.create);
 
   const isResizingRef = useRef(false);
@@ -144,9 +144,7 @@ const Navigation: React.FC<NavigationProps> = ({}) => {
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          {documents?.map((document) => (
-            <p key={document._id}>{document.title}</p>
-          ))}
+          <DocumentList />
         </div>
         <div
           onMouseDown={handleMouseDown}
