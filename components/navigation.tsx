@@ -4,11 +4,19 @@
 import React, { ElementRef, useRef, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
-import { useQuery } from "convex/react";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import { useMutation, useQuery } from "convex/react";
+import {
+  ChevronsLeft,
+  MenuIcon,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react";
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import UserItem from "@/components/user-item";
+import Item from "@/components/item";
 import { api } from "@/convex/_generated/api";
 
 interface NavigationProps {}
@@ -17,6 +25,7 @@ const Navigation: React.FC<NavigationProps> = ({}) => {
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const documents = useQuery(api.documents.get);
+  const create = useMutation(api.documents.create);
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -98,6 +107,16 @@ const Navigation: React.FC<NavigationProps> = ({}) => {
     }
   };
 
+  const handleCreate = () => {
+    const promise = create({ title: "Untitled" });
+
+    toast.promise(promise, {
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Try again later.",
+    });
+  };
+
   return (
     <React.Fragment>
       <aside
@@ -120,6 +139,9 @@ const Navigation: React.FC<NavigationProps> = ({}) => {
         </div>
         <div>
           <UserItem />
+          <Item label="Search" icon={Search} isSearch onClick={() => {}} />
+          <Item label="Settings" icon={Settings} onClick={() => {}} />
+          <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
           {documents?.map((document) => (
