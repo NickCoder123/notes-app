@@ -1,10 +1,11 @@
 import { PropsWithChildren } from "react";
-import Navbar from "@/components/navbar";
+
+import MarketingNavbar from "@/components/marketing-navbar";
 
 const MarketingLayout = ({ children }: PropsWithChildren) => {
   return (
     <div className="h-full dark:bg-[#1F1F1F]">
-      <Navbar />
+      <MarketingNavbar />
       <main className="h-full pt-40">{children}</main>
     </div>
   );

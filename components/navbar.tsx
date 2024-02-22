@@ -1,56 +1,53 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { useConvexAuth } from "convex/react";
-import { SignInButton, UserButton, SignUpButton } from "@clerk/clerk-react";
+import { useParams } from "next/navigation";
+import { useQuery } from "convex/react";
+import { MenuIcon } from "lucide-react";
 
-import { useScrollTop } from "@/hooks/use-scroll-top";
-import { cn } from "@/lib/utils";
-import Logo from "@/components/logo";
-import Spinner from "@/components/spinner";
-import ModeToggle from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import Title from "@/components/title";
 
-interface NavbarProps {}
+interface NavbarProps {
+  isCollapsed: boolean;
+  onResetWidth: () => void;
+}
 
-const Navbar: React.FC<NavbarProps> = ({}) => {
-  const { isAuthenticated, isLoading } = useConvexAuth();
-  const scrolled = useScrollTop();
+const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onResetWidth }) => {
+  const params = useParams();
+
+  const document = useQuery(api.documents.getById, {
+    documentId: params.documentId as Id<"documents">,
+  });
+
+  if (document === undefined) {
+    return (
+      <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center">
+        <Title.Skeleton />
+      </nav>
+    );
+  }
+
+  if (document === null) {
+    return null;
+  }
 
   return (
-    <div
-      className={cn(
-        "z-50 bg-background dark:bg-[#1F1F1F] fixed top-0 flex items-center w-full p-6",
-        scrolled && "border-b shadow-sm"
-      )}
-    >
-      <Logo />
-      <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-2">
-        {isLoading && <Spinner />}
-        {!isAuthenticated && !isLoading && (
-          <React.Fragment>
-            <SignInButton mode="modal">
-              <Button variant="ghost" size="sm">
-                Log in
-              </Button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-              <Button size="sm">Get Jotion free</Button>
-            </SignUpButton>
-          </React.Fragment>
+    <React.Fragment>
+      <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center gap-x-4">
+        {isCollapsed && (
+          <MenuIcon
+            role="button"
+            onClick={onResetWidth}
+            className="h-6 w-6 text-muted-foreground"
+          />
         )}
-        {isAuthenticated && !isLoading && (
-          <React.Fragment>
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/documents">Enter Jotion</Link>
-            </Button>
-            <UserButton afterSignOutUrl="/" />
-          </React.Fragment>
-        )}
-        <ModeToggle />
-      </div>
-    </div>
+        <div className="flex items-center justify-between w-full">
+          <Title initialData={document} />
+        </div>
+      </nav>
+    </React.Fragment>
   );
 };
 

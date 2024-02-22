@@ -2,7 +2,7 @@
 "use client";
 
 import React, { ElementRef, useRef, useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
 import { useMutation } from "convex/react";
 import {
@@ -27,6 +27,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import Navbar from "@/components/navbar";
 import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-settings";
 
@@ -35,6 +36,7 @@ interface NavigationProps {}
 const Navigation: React.FC<NavigationProps> = ({}) => {
   const search = useSearch();
   const settings = useSettings();
+  const params = useParams();
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
@@ -184,15 +186,19 @@ const Navigation: React.FC<NavigationProps> = ({}) => {
           isMobile && "left-0 w-full"
         )}
       >
-        <nav className="px-3 py-2 bg-transparent w-full">
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              role="button"
-              className="w-6 h-6 text-muted-foreground"
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="px-3 py-2 bg-transparent w-full">
+            {isCollapsed && (
+              <MenuIcon
+                onClick={resetWidth}
+                role="button"
+                className="w-6 h-6 text-muted-foreground"
+              />
+            )}
+          </nav>
+        )}
       </div>
     </React.Fragment>
   );
