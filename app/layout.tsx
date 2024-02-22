@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
+import { ModalProvider } from "@/components/providers/modal-provider";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -45,6 +46,7 @@ export default function RootLayout({
             storageKey="jotion-theme"
           >
             <Toaster position="bottom-center" />
+            <ModalProvider />
             {children}
           </ThemeProvider>
         </ConvexClientProvider>
