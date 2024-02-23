@@ -45,7 +45,7 @@ export default function RootLayout({
             disableTransitionOnChange
             storageKey="jotion-theme"
           >
-            <Toaster position="bottom-center" />
+            <Toaster position="bottom-center" richColors />
             <ModalProvider />
             {children}
           </ThemeProvider>
