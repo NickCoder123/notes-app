@@ -11,6 +11,7 @@ import { useCoverImage } from "@/hooks/use-cover-image";
 import { cn } from "@/lib/utils";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface CoverProps {
   url?: string;
@@ -68,6 +69,10 @@ const Cover = ({ url, preview }: CoverProps) => {
       )}
     </div>
   );
+};
+
+Cover.Skeleton = function CoverSkeleton() {
+  return <Skeleton className="w-full h-[12vh]" />;
 };
 
 export default Cover;
