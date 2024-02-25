@@ -137,8 +137,13 @@ export const restore = mutation({
 
     const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingDocument) throw new Error("Not found");
-    if (existingDocument.userId !== userId) throw new Error("Unauthorized");
+    if (!existingDocument) {
+      throw new Error("Not found");
+    }
+
+    if (existingDocument.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
 
     const recursiveRestore = async (documentId: Id<"documents">) => {
       const children = await ctx.db
@@ -189,8 +194,13 @@ export const remove = mutation({
 
     const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingDocument) throw new Error("Not found");
-    if (existingDocument.userId !== userId) throw new Error("Unauthorized");
+    if (!existingDocument) {
+      throw new Error("Not found");
+    }
+
+    if (existingDocument.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
 
     const document = await ctx.db.delete(args.id);
 
@@ -226,16 +236,23 @@ export const getById = query({
 
     const document = await ctx.db.get(args.documentId);
 
-    if (!document) throw new Error("Not found");
-    if (!identity) throw new Error("Not authenticated");
+    if (!document) {
+      throw new Error("Not found");
+    }
 
     if (document.isPublished && !document.isArchived) {
       return document;
     }
 
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
     const userId = identity.subject;
 
-    if (document.userId !== userId) throw new Error("Unauthorized");
+    if (document.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
 
     return document;
   },
@@ -253,7 +270,9 @@ export const update = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
-    if (!identity) throw new Error("Unauthenticated");
+    if (!identity) {
+      throw new Error("Unauthenticated");
+    }
 
     const userId = identity.subject;
 
@@ -261,11 +280,17 @@ export const update = mutation({
 
     const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingDocument) throw new Error("Not found");
+    if (!existingDocument) {
+      throw new Error("Not found");
+    }
 
-    if (existingDocument.userId !== userId) throw new Error("Unauthorized");
+    if (existingDocument.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
 
-    const document = await ctx.db.patch(args.id, { ...rest });
+    const document = await ctx.db.patch(args.id, {
+      ...rest,
+    });
 
     return document;
   },
@@ -276,14 +301,21 @@ export const removeIcon = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
-    if (!identity) throw new Error("Unauthenticated");
+    if (!identity) {
+      throw new Error("Unauthenticated");
+    }
 
     const userId = identity.subject;
 
     const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingDocument) throw new Error("Not found");
-    if (existingDocument.userId !== userId) throw new Error("Unauthorized");
+    if (!existingDocument) {
+      throw new Error("Not found");
+    }
+
+    if (existingDocument.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
 
     const document = await ctx.db.patch(args.id, {
       icon: undefined,
@@ -298,14 +330,21 @@ export const removeCoverImage = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
-    if (!identity) throw new Error("Unauthenticated");
+    if (!identity) {
+      throw new Error("Unauthenticated");
+    }
 
     const userId = identity.subject;
 
     const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingDocument) throw new Error("Not found");
-    if (existingDocument.userId !== userId) throw new Error("Unauthorized");
+    if (!existingDocument) {
+      throw new Error("Not found");
+    }
+
+    if (existingDocument.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
 
     const document = await ctx.db.patch(args.id, {
       coverImage: undefined,
