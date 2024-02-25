@@ -34,7 +34,7 @@ Key Features:
 ### Cloning the repository
 
 ```shell
-git clone https://github.com/AntonioErdeljac/notion-clone-tutorial.git
+git clone https://github.com/NickCoder123/notes-app.git
 ```
 
 ### Install packages
