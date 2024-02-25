@@ -11,6 +11,7 @@ export const ConvexClientProvider = ({ children }: PropsWithChildren) => {
   return (
     <ClerkProvider
       publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      frontendApi={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
       <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
         {children}
